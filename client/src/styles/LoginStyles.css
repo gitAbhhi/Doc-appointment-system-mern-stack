@@ -1,0 +1,22 @@
+.form-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+   
+}
+.Register-form{
+    /* border: 1px solid gray; */
+    /* background-color: gray; */
+    padding: 15px;
+    width: 400px;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3); /* horizontal, vertical, blur, color */
+    border-radius: 15px;
+    /* background-color: red; */
+}
+/* @media (min-display:680px) {
+    .sidebar{
+        display: hidden;
+    }
+    
+} */
