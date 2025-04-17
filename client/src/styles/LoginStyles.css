@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-   
+   background-image: url(../assets/doctor\ \(1\).png);  
 }
 .Register-form{
     /* border: 1px solid gray; */
@@ -12,7 +12,7 @@
     width: 400px;
     box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3); /* horizontal, vertical, blur, color */
     border-radius: 15px;
-    /* background-color: red; */
+    background-color: white;
 }
 /* @media (min-display:680px) {
     .sidebar{

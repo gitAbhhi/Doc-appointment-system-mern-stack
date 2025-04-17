@@ -12,8 +12,8 @@ const BookingPage = () => {
   const { user } = useSelector(state => state.user)
   const params = useParams()
   const [doctors, setDoctors] = useState([]);
-  const [date, setDate] = useState()
-  const [time, setTime] = useState()
+  const [date, setDate] = useState("")
+  const [time, setTime] = useState("")
   const [isAvailable, setIsAvailable] = useState()
   const dispatch = useDispatch()
   // login user data
@@ -46,6 +46,7 @@ const BookingPage = () => {
         return alert("Date & Time Required");
       }
       dispatch(showLoading())
+      console.log(date,time)
       const res = await axios.post('/api/v1/user/book-appointment',
         {
           doctorId: params.doctorId,
@@ -76,7 +77,7 @@ const BookingPage = () => {
     try {
       dispatch(showLoading())
       const res = await axios.post('/api/v1/user/booking-availability',
-        { doctorId: params.doctorId, datetime },
+        { doctorId: params.doctorId,date,time },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -110,17 +111,24 @@ const BookingPage = () => {
             </h4>
             <h4>Fees :{doctors.feesPerCunsaltation}</h4>
             <h4>
-              Timings : {doctors.timings && doctors.timings[0]} -{" "}
-              {doctors.timings && doctors.timings[1]}{" "}
+              Timings :  {doctors.timings && moment(doctors.timings[0]).format("HH:mm")}-
+              {doctors.timings && moment(doctors.timings[1]).format("HH:mm")}
+              {/* {doctors.timings && doctors.timings[0]} -{" "}
+              {doctors.timings && doctors.timings[1]}{" "} */}
             </h4>
             <div className="d-flex flex-column w-50">
               <DatePicker aria-required={"true"} className='m-2' format="DD-MM-YYYY" onChange={(value) => {
                 // setIsAvailable(false)
-                setDate(moment(value).format("DD-MM-YYYY"))
+                // setDate(moment(value).format("DD-MM-YYYY"))
+                setDate(value)
+
               }} />
               <TimePicker aria-required={"true"} className='m-2' format="HH:mm" onChange={(value) => {
-                // setIsAvailable(false)
-                setTime(moment(value).format("HH:mm"))
+                console.log("value ",value)
+               console.log("Formatted Time:", moment(value).format("HH:mm"));
+                // setTime(moment(value).format("HH:mm"))
+                setTime(value)
+
               }} />
               <button className='btn btn-primary mt-2' onClick={handleAvailability}>check Availability</button>
               

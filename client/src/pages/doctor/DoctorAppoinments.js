@@ -50,18 +50,14 @@ const DoctorAppoinments = () => {
     }
     const columns=[
         {
-            title:"ID",
-            dataIndex:"_id"
+            title:'Patient Name',
+            dataIndex:'name',
+            render:(text,record)=>(
+                <span>
+                    {record.userInfo.name}
+                </span>
+            )
         },
-        // {
-        //     title:'Name',
-        //     dataIndex:'name',
-        //     render:(text,record)=>(
-        //         <span>
-        //             {record.doctorId.firstName} {record.doctorId.lastName}
-        //         </span>
-        //     )
-        // },
         // {
         //     title:'Phone',
         //     dataIndex:'phone',

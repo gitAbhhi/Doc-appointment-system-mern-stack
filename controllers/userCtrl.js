@@ -175,8 +175,8 @@ const getAllDoctorsController=async(req,res)=>{
 //book appointment
 const bookAppointmentController=async(req,res)=>{
     try {
-        req.body.date=moment(req.body.date,'DD-MM-YYYY').toISOString()
-        req.body.time=moment(req.body.time,'HH:mm').toISOString()
+        // req.body.date=moment(req.body.date,'DD-MM-YYYY').toISOString()
+        // req.body.time=moment(req.body.time,'HH:mm').toISOString()
         req.body.status="pending"
         const newAppointment=new appointmentModel(req.body)
         await newAppointment.save()
@@ -184,7 +184,8 @@ const bookAppointmentController=async(req,res)=>{
         user.notification.push({
             type:"New-appointment-request",
             message:`A new Appointment Request from ${req.body.userInfo.name}`,
-            onClickPath:'/user/appointments',
+            onClickPath:'/doctor-appointments',
+            // /user/appointments
         });
         await user.save()
         res.status(200).send({
@@ -244,32 +245,52 @@ try {
 
 //user appointment ctrl
 const userAppointmentsController=async(req,res)=>{
+    // try {
+    //     const {appointmentId,status}=req.body
+    //     const appointments=await appointmentModel.findByIdAndUpdate(
+    //         appointmentId,
+    //         {status}
+    //     )
+    //     const user=await userModel.findOne({_id:appointmentId})
+    //     user.notification.push({
+    //         type:"status-updated",
+    //         message:`Your Appointment has been updated ${status}`,
+    //         onClickPath:'/doctor-appointments',
+    //     });
+    //     await user.save()
+    //     res.status(200).send({
+    //         success:true,
+    //         message:"Appointment status updated"
+    //     })
+    // } catch (error) {
+    //     console.log(error)
+    //     res.status(500).send({
+    //         success:false,
+    //         error,
+    //         message:"Error in user appointment"
+    //     })
+    // }
     try {
-        const {appointmentId,status}=req.body
-        const appointments=await appointmentModel.findByIdAndUpdate(
-            appointmentId,
-            {status}
-        )
-        const user=await userModel.findOne({_id:appointmentId.userId})
-        user.notification.push({
-            type:"status-updated",
-            message:`Your Appointment has been updated ${status}`,
-            onClickPath:'/doctor-appointments',
-        });
-        await user.save()
+        const appointments = await appointmentModel.find({ userId: req.body.userId });
+        const user=await userModel.findOne({_id:appointmentId})
+            user.notification.push({
+                type:"status-updated",
+                message:`Your Appointment has been updated ${status}`,
+                onClickPath:'/doctor-appointments',
+            });
         res.status(200).send({
-            success:true,
-            message:"Appointment status updated"
+            success: true,
+            message: "appointments Lists Fetched Successfully",
+            data: appointments,
         })
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).send({
-            success:false,
+            success: false,
             error,
-            message:"Error in user appointment"
-        })
+            message: "Error during checking user appoiment list",
+        });
     }
-
 }
 
 module.exports = { 

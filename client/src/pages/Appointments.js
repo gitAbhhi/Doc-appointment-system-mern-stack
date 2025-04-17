@@ -27,33 +27,29 @@ const Appointments = () => {
     },[])
     const columns=[
         {
-            title:"ID",
-            dataIndex:"_id"
+            title:"Doctor's Name",
+            dataIndex:'name',
+            render:(text,record)=>(
+                <span>
+                    {record.doctorInfo.firstName} {record.doctorInfo.lastName}
+                </span>
+            )
         },
-        // {
-        //     title:'Name',
-        //     dataIndex:'name',
-        //     render:(text,record)=>(
-        //         <span>
-        //             {record.doctorId.firstName} {record.doctorId.lastName}
-        //         </span>
-        //     )
-        // },
-        // {
-        //     title:'Phone',
-        //     dataIndex:'phone',
-        //     render:(text,record)=>(
-        //         <span>
-        //             {record.doctorId.phone}
-        //         </span>
-        //     )
-        // },
+        {
+            title:"Doctor's Phone No",
+            dataIndex:'phone',
+            render:(text,record)=>(
+                <span>
+                    {record.doctorInfo.phone}
+                </span>
+            )
+        },
         {
             title:'Date & Time',
             dataIndex:'date',
             render:(text,record)=>(
                 <span>
-                    {moment(record.date).format('DD-MM-YYYY')} &nbsp;
+                    {moment(record.date).format('DD/MM/YYYY')} &nbsp;
                     {moment(record.time).format('HH-mm')}
                 </span>
             )

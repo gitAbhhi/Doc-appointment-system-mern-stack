@@ -5,6 +5,7 @@ import { Badge } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { message } from "antd";
+// import doctorimg from "../../assets/doctor (2)"
 
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
@@ -59,7 +60,7 @@ const Layout = ({ children }) => {
                 const isActive = location.pathname === menu.path;
                 return (
                   <>
-                    <div className={`menu-item ${isActive && "active"}`}>
+                    <div key={menu.name} className={`menu-item ${isActive && "active"}`}>
                       <i className={menu.icon}></i>
                       <Link to={menu.path} >{menu.name}</Link>
                     </div>
@@ -70,11 +71,15 @@ const Layout = ({ children }) => {
                 <i className="fa-solid fa-right-from-bracket"></i>
                 <Link to="/login">Logout</Link>
               </div>
+              
+            </div>
+              {/* <img src="../../assets/doctor.png" alt="img" /> */}
+            <div className="imagelogo">
             </div>
           </div>
           <div className="content">
             <div className="header">
-              <h3 className="logo"> DOC APP <i className="fa-solid fa-user-doctor"></i></h3>
+              <h3 className="logo-d"> DOC APP <i className="fa-solid fa-user-doctor"></i></h3>
               <div className="header-content">
                 <Badge count={user && user.notification.length} onClick={()=>{
                   navigate('/notification')}}
