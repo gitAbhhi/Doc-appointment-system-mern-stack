@@ -24,9 +24,12 @@ const getDoctorInfoController = async (req, res) => {
 // update doc profile
 const updateProfileController = async (req, res) => {
     try {
-        const doctor = await doctorModel.findByIdAndUpdate({ userId: req.body.userId },
-            req.body
+        console.log("req.body ",req.body.userId)
+        const {userId,...restofbody}=req.body
+        const doctor = await doctorModel.findOneAndUpdate({ userId:userId },
+            restofbody,
         )
+console.log("doctor",doctor)
         res.status(201).send({
             success: true,
             message: "Doctor profile updated",
@@ -83,17 +86,21 @@ const doctorAppointmentsController = async (req, res) => {
 
 const updateStatusController = async (req, res) => {
     try {
-        const { appointmentsId, status } = req.body;
+        const  {appointmentsId,status ,UserId}= req.body;
+        // const status=req.body.appointment.status;
+        console.log(req.body)
+        console.log("userid form doc  ctrl",UserId)
         const appointments = await appointmentModel.findByIdAndUpdate(
             appointmentsId,
             { status }
         );
-        const user = await userModel.findOne({ id: appointments.userId });
+        const user = await userModel.findOne({ _id:UserId});
+        console.log("user form doc ctrl ",user)
         const notification=user.notification
         notification.push({
             type: "status-updated",
             message: `your appointment has been updated ${status}`,
-            onCLickPath: "/doctor-appointments",
+            onCLickPath: "/appointments",
         });
         await user.save();
         res.status(200).send({

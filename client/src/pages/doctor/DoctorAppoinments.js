@@ -29,9 +29,10 @@ const DoctorAppoinments = () => {
     //handle status
     const handleStatus=async(record,status)=>{
         try {
+            console.log("userid",record.userId)
             const res=await axios.post(
                 "/api/v1/doctor/update-status",
-                {appointmentsId:record._id,status},
+                {appointmentsId:record._id,status,UserId:record.userId},
                 {
                     headers:{
                         Authorization:`Bearer ${localStorage.getItem("token")}`
@@ -90,6 +91,20 @@ const DoctorAppoinments = () => {
                         <div className="d-flex">
                             <button className='btn btn-success m-2' onClick={()=>handleStatus(record,"approved")}>Approved</button>
                             <button className='btn btn-danger m-2' onClick={()=>handleStatus(record,"reject")}>Reject</button>
+                        </div>
+                    )}
+                </div>
+            )
+        },
+        {
+            title:'Reject appointment',
+            dataIndex:'actions',
+            render:(text,record)=>(
+                <div className="d-flex">
+                    {record.status==="approved" && (
+                        <div className="d-flex">
+                            {/* <button className='btn btn-success m-2' onClick={()=>handleStatus(record,"approved")}>Approved</button> */}
+                            <button className='btn btn-danger m-2' onClick={()=>handleStatus(record,"pending")}>Reject</button>
                         </div>
                     )}
                 </div>

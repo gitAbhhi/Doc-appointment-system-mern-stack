@@ -5,9 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { hideLoading, showLoading } from '../redux/features/alertSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { setUser } from '../redux/features/userSlice';
+// import {setUser} from '../redux/features/userSlice'
 const NotificationPage = () => {
     const dispatch=useDispatch();
     const {user}=useSelector(state=>state.user)
+    // const [USER,SETUSER]=useState(user)
     const navigate=useNavigate();
 
     //handle read notification
@@ -25,6 +28,8 @@ const NotificationPage = () => {
             dispatch(hideLoading());
             if(res.data.success){
                 message.success(res.data.message);
+               dispatch(setUser(res.data.data))
+                
             }else{
                 message.error(res.data.message);
             }
@@ -50,6 +55,7 @@ const NotificationPage = () => {
             dispatch(hideLoading())
             if(res.data.success){
                 message.success(res.data.message);
+                dispatch(setUser(res.data.data))
             }else{
                 message.error(res.data.message);
             }
@@ -59,19 +65,20 @@ const NotificationPage = () => {
             message.error("Something Went Wrong in Notifications");
         }
     }
+    
   return (
    <Layout>
     <h4 className='text-center'>Notification page</h4>
     <Tabs>
         <Tabs.TabPane tab="UnRead" key={0}>
             <div className="d-flex justify-content-end " style={{cursor:'pointer'}}>
-                <h4 className='p-2 ' onClick={()=>handleMarkAllRead}>Mark All Read</h4>
+                <h4 className='p-2 text-primary' style={{cursor:'pointer'}} onClick={handleMarkAllRead}>Mark All Read</h4>
             </div>
             {
                 user?.notification.map(notificationMgs=>(
-                    <div className="card p-2 m-2" style={{cursor:'pointer'}}>
+                    <div  key={notificationMgs._id} className="card p-2 m-2" style={{cursor:'pointer'}}>
                         <div className="card-text"
-                         onClick={()=>navigate(notificationMgs.onClickPath)}
+                         onClick={()=>navigate(notificationMgs.onCLickPath) }
                         >
                             {notificationMgs.message}
                         </div>
@@ -81,13 +88,14 @@ const NotificationPage = () => {
         </Tabs.TabPane>
         <Tabs.TabPane tab="Read" key={1}>
             <div className="d-flex justify-content-end">
-                <h4 className='p-2 m-2 text-primary' style={{cursor:'pointer'}} onClick={()=>handleDeleteAllRead}>Delete All Read</h4>
+                <h4 className='p-2 m-2 text-primary' style={{cursor:'pointer'}} onClick={handleDeleteAllRead}>Delete All Read</h4>
             </div>
             {
                 user?.seennotification.map(notificationMgs=>(
-                    <div className="card p-2 m-2" style={{cursor:'pointer'}}>
+                    <div  key={notificationMgs._id} className="card p-2 m-2" style={{cursor:'pointer'}}>
                         <div className="card-text"
-                         onClick={()=>navigate(notificationMgs.onClickPath)}
+                         onClick={()=>{console.log(notificationMgs.onClickPath)
+                             navigate(notificationMgs.onClickPath)}}
                         >
                             {notificationMgs.message}
                         </div>

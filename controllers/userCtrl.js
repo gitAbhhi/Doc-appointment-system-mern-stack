@@ -272,12 +272,12 @@ const userAppointmentsController=async(req,res)=>{
     // }
     try {
         const appointments = await appointmentModel.find({ userId: req.body.userId });
-        const user=await userModel.findOne({_id:appointmentId})
-            user.notification.push({
-                type:"status-updated",
-                message:`Your Appointment has been updated ${status}`,
-                onClickPath:'/doctor-appointments',
-            });
+        // const user=await userModel.findOne({_id:appointments.userId})
+        //     user.notification.push({
+        //         type:"status-updated",
+        //         message:`Your Appointment has been updated ${status}`,
+        //         onClickPath:'/doctor-appointments',
+        //     });
         res.status(200).send({
             success: true,
             message: "appointments Lists Fetched Successfully",
