@@ -114,7 +114,7 @@ const DoctorAppoinments = () => {
   return (
     <Layout>
        <h1 className='text-center'>Appointments list</h1>
-       <Table columns={columns} className='flex' dataSource={appointments} />
+       <Table columns={columns}  dataSource={appointments} />
     </Layout>
   )
 }

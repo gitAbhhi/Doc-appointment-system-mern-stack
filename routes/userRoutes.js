@@ -1,6 +1,7 @@
 const express =require('express')
-const { loginController, registerController, authController,applyDoctorController,getAllNotificationController,deleteAllNotificationController, getAllDoctorsController, bookAppointmentController, bookingAvailabilityController, userAppointmentsController} = require('../controllers/userCtrl')
+const { loginController, registerController, authController,applyDoctorController,getAllNotificationController,deleteAllNotificationController, getAllDoctorsController, bookAppointmentController, bookingAvailabilityController, userAppointmentsController, updateProfileImageController} = require('../controllers/userCtrl')
 const authMiddleware = require('../middlewares/authMiddleware')
+const upload=require("../config/multerconfig")
 
 //router object
 const router=express.Router()
@@ -16,7 +17,7 @@ router.post('/register',registerController)
 router.post('/getUserData',authMiddleware,authController)
 
 //Apply doctor||post
-router.post('/apply-doctor',authMiddleware,applyDoctorController)
+router.post('/apply-doctor',authMiddleware,upload.single("profileImage"),applyDoctorController)
 module.exports=router;
 
 //Notification doctor||post
@@ -37,4 +38,7 @@ router.post('/booking-availability',authMiddleware,bookingAvailabilityController
 
 //user Appintment
 router.get('/user-appointments',authMiddleware,userAppointmentsController)
+
+//update Profile Image
+router.post("/updateProfileImage",authMiddleware,upload.single("avatar"),updateProfileImageController)
 module.exports=router;

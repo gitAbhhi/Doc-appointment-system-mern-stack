@@ -47,6 +47,10 @@ const doctorSchema=new mongoose.Schema({
         type:Object,
         required:[true,'work timing is required']
     },
+    userInfo:{
+        type:Object,
+        required:true
+    },
 
 },{timestamps:true})
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import Layout from "./../components/Layout";
 import { Row } from "antd";
 import DoctorList from "../components/DoctorList";
+import { setUser } from "../redux/features/userSlice";
 const HomePage = () => {
   const[doctors,setDoctors]=useState([]);
   // login user data
@@ -29,7 +30,7 @@ const HomePage = () => {
   }, []);
   return (
     <Layout>
-      <h1 className="text-center">Home Page</h1>
+      <h1 className="text-center text-3xl">Home Page</h1>
       <Row>
         {doctors && doctors.map((doctor)=><DoctorList doctor={doctor}/>)}
       </Row>

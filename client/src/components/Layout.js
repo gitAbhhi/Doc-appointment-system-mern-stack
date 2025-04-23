@@ -3,19 +3,22 @@ import "../styles/LayoutStyles.css";
 import { adminMenu, userMenu } from "./../Data/data";
 import { Badge } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
+import { removeUser } from "../redux/features/userSlice";
 // import doctorimg from "../../assets/doctor (2)"
 
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch=useDispatch();
 
   // logout funtion
   const handleLogout = () => {
     localStorage.clear();
     message.success("Logout Successfully");
+    dispatch(removeUser());
     navigate("/login");
   };
 
@@ -87,6 +90,7 @@ const Layout = ({ children }) => {
                   <i class="fa-solid fa-bell"  style={{cursor:"pointer"}}></i>
                 </Badge>
                 <Link to="/profile">{user?.name}</Link>
+                <img src={user?.profileImage} alt="img" className="ml-2 w-[50px] h-[50px] rounded-full object-cover" />
               </div>
             </div>
             <div className="body p-4">{children}</div>

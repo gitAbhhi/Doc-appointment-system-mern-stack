@@ -15,22 +15,36 @@ const Profile = () => {
     const navigate = useNavigate()
     const [timePickerValue, setTimePickerValue] = useState(null);
 
+
     //handle form
     const handleFinish = async (values) => {
         try {
             dispatch(showLoading())
-            console.log("values ",values)
-            console.log("userid ",user._id)
+            console.log("values ", values)
+            console.log("userid ", user._id)
 
-            console.log(values.timings[0],values.timings[1])
+            console.log(values.timings[0], values.timings[1])
+            const formData = new FormData();
+
+            // Append all other form fields
+            formData.append("userId", user._id);
+            formData.append("firstName", values.firstName);
+            formData.append("lastName", values.lastName);
+            formData.append("phone", values.phone);
+            formData.append("email", values.email);
+            formData.append("website", values.website);
+            formData.append("address", values.address);
+            formData.append("specialization", values.specialization);
+            formData.append("experience", values.experience);
+            formData.append("feesPerCunsaltation", values.feesPerCunsaltation);
+            formData.append("timings", values.timings[0]);
+            formData.append("timings", values.timings[1]);
             const res = await axios.post("/api/v1/doctor/updateProfile",
-                {
-                    ...values, userId:user._id
-                    , timings:[values.timings[0],values.timings[1]],
-                },
+                formData,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "multipart/form-data",
                     },
                 });
             dispatch(hideLoading());
@@ -92,10 +106,14 @@ const Profile = () => {
                         //     moment(doctor.timings[1]).format('HH:mm')
                         // ],
                         ,
-                        timings:  [                     
-                            moment(doctor.timings[0], 'YYYY-MM-DDTHH:mm:ss.SSSZ'),
-                            moment(doctor.timings[1], 'YYYY-MM-DDTHH:mm:ss.SSSZ'),
-                          ] ,
+                        timings: [
+                            // moment(doctor.timings[0], 'YYYY-MM-DDTHH:mm:ss.SSSZ'),
+                            moment(doctor.timings[0]).local(),
+                            moment(doctor.timings[1]).local()
+                            // moment(doctor.timings[1], 'YYYY-MM-DDTHH:mm:ss.SSSZ'),
+                            // moment(doctor.timings[0]).format('HH:mm'),
+                            //     moment(doctor.timings[1]).format('HH:mm')
+                        ],
                     }}>
                         <h4>Personal Details :</h4>
                         <Row gutter={20}>
@@ -206,15 +224,15 @@ const Profile = () => {
                                     label="Timings"
                                     name="timings"
                                     required
-                                rules={[{ required: true }]}
+                                    rules={[{ required: true }]}
                                 >
                                     <TimePicker.RangePicker format="HH:mm" />
-                                    {/* {moment(doctor.timings[0]).format('HH:mm')}-{moment(doctor.timings[1]).format('HH:mm')} */}
-                                    {/* {moment(doctor.timings[0],'HH:mm')}-{moment(doctor.timings[1],'HH:mm')} */}
                                 </Form.Item>
                             </Col>
 
-                            <Col xs={24} md={24} lg={8}></Col>
+                            <Col xs={24} md={24} lg={8}>
+                                
+                            </Col>
                             <Col xs={24} md={24} lg={8}>
                                 <button className='btn btn-primary form-btn' type='submit'>Update</button>
                             </Col>

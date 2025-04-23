@@ -24,10 +24,22 @@ const getDoctorInfoController = async (req, res) => {
 // update doc profile
 const updateProfileController = async (req, res) => {
     try {
+        const file=req.file;
+        const {userId,...restofbody}=req.body;
+
+        if(file){
+            const base64Image=file.buffer.toString("base64")
+            const mimeType=file.mimteype;
+            const fullImage=`data:${mimeType};base64,${base64Image}`;
+            restofbody.profileImage=fullImage;
+        }
+        
         console.log("req.body ",req.body.userId)
-        const {userId,...restofbody}=req.body
         const doctor = await doctorModel.findOneAndUpdate({ userId:userId },
             restofbody,
+            {
+                new:true
+            }
         )
 console.log("doctor",doctor)
         res.status(201).send({
@@ -100,7 +112,7 @@ const updateStatusController = async (req, res) => {
         notification.push({
             type: "status-updated",
             message: `your appointment has been updated ${status}`,
-            onCLickPath: "/appointments",
+            onClickPath: "/appointments",
         });
         await user.save();
         res.status(200).send({

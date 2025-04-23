@@ -6,13 +6,14 @@ const DoctorList = ({doctor}) => {
     const navigate=useNavigate()
   return (
     <>
-     <div className="card m-2" 
+     <div className="card m-2 shadow-md" 
      style={{cursor:'pointer'}}
      onClick={()=>navigate(`/doctor/book-appointment/${doctor._id}`)}>
-        <div className="card-header">
+        <div className="card-header ">
             Dr. {doctor.firstName} {doctor.lastName}
         </div>
         <div className="card-body">
+            <img src={doctor.userInfo.profileImage} alt="img" className='w-[260px] h-[280px] object-cover mb-3 rounded-md' />
             <p>
                 <b>Specialization</b> {doctor.specialization}
             </p>

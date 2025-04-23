@@ -4,10 +4,12 @@ import axios  from 'axios'
 import { useEffect ,useState} from 'react'
 import { Table } from 'antd'
 import { message } from 'antd'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../redux/features/userSlice'
 
 const Doctors = () => {
 const [doctors,setDoctors]=useState([])
-
+const dispatch=useDispatch()
   //get doctor
   const getDoctors=async()=>{
     try {
@@ -37,7 +39,7 @@ const [doctors,setDoctors]=useState([])
         )
         if(res.data.success){
           message.success(res.data.message);
-          window.location.reload();
+          getDoctors()
         }
         
       } catch (error) {
@@ -70,7 +72,7 @@ const [doctors,setDoctors]=useState([])
       render:(text,record)=>(
         <div className='d-flex'>
           {record.status === "pending"?(<button className='btn btn-success' onClick={()=>handleAccountStatus(record,"approved")}>Approve</button>)
-          :(<button className='btn btn-danger'>Reject</button>)}
+          :(<button className='btn btn-danger' onClick={()=>handleAccountStatus(record,"pending")} >Reject</button>)}
         </div>
       ),
     },

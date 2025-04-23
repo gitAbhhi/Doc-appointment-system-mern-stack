@@ -78,7 +78,7 @@ const NotificationPage = () => {
                 user?.notification.map(notificationMgs=>(
                     <div  key={notificationMgs._id} className="card p-2 m-2" style={{cursor:'pointer'}}>
                         <div className="card-text"
-                         onClick={()=>navigate(notificationMgs.onCLickPath) }
+                         onClick={()=>navigate(notificationMgs.onClickPath) }
                         >
                             {notificationMgs.message}
                         </div>
