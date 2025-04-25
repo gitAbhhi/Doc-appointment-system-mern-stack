@@ -59,15 +59,15 @@ const Layout = ({ children }) => {
               <hr />
             </div>
             <div className="menu">
-              {SidebarMenu.map((menu) => {
+              {SidebarMenu.map((menu,index) => {
                 const isActive = location.pathname === menu.path;
                 return (
-                  <>
-                    <div key={menu.name} className={`menu-item ${isActive && "active"}`}>
+                  
+                    <div key={index} className={`menu-item ${isActive && "active"}`}>
                       <i className={menu.icon}></i>
                       <Link to={menu.path} >{menu.name}</Link>
                     </div>
-                  </>
+              
                 );
               })}
               <div className={`menu-item `} onClick={handleLogout}>
@@ -85,12 +85,14 @@ const Layout = ({ children }) => {
               <h3 className="logo-d"> DOC APP <i className="fa-solid fa-user-doctor"></i></h3>
               <div className="header-content">
                 <Badge count={user && user.notification.length} onClick={()=>{
-                  navigate('/notification')}}
+                  navigate('/notification')}} style={{cursor:"pointer"}}
                   >
-                  <i class="fa-solid fa-bell"  style={{cursor:"pointer"}}></i>
+                  <i className="fa-solid fa-bell" onClick={()=>{
+                  navigate('/notification')}}  style={{cursor:"pointer"}}></i>
                 </Badge>
-                <Link to="/profile">{user?.name}</Link>
+                <Link to="/profile" className="flex items-center">{user?.name}
                 <img src={user?.profileImage} alt="img" className="ml-2 w-[50px] h-[50px] rounded-full object-cover" />
+                </Link>
               </div>
             </div>
             <div className="body p-4">{children}</div>

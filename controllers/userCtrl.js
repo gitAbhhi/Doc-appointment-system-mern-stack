@@ -41,8 +41,12 @@ const loginController = async (req, res) => {
             return res.status(200).send({ message: 'Invalid Email or Password', success: false })
 
         }
+        if (user.block) {
+            return res.status(200).send({ message: "You are blocked by admin", success: false })
+        }
+
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
-        res.status(200).send({ message: 'Login Success', success: true, token,data:user })
+        res.status(200).send({ message: 'Login Success', success: true, token, data: user })
     } catch (error) {
         console.log(error)
         res.status(500).send({ message: `Error in Login CTRL ${error.message}` })
@@ -96,13 +100,13 @@ const applyDoctorController = async (req, res) => {
         // const fullImage = `data:${mimeType};base64,${base64Image}`;
 
         // const timings = JSON.parse(req.body.timings); // ["10:00", "18:00"]
-const userInfo=JSON.parse(req.body.userInfo)
-        const newDoctor = await doctorModel({ ...req.body, status: 'pending',userInfo:userInfo})
-        console.log("newDoctor detail",req.body.timings)
-        console.log("newDoctor detail",req.newDoctor)
+        const userInfo = JSON.parse(req.body.userInfo)
+        const newDoctor = await doctorModel({ ...req.body, status: 'pending', userInfo: userInfo })
+        console.log("newDoctor detail", req.body.timings)
+        console.log("newDoctor detail", req.newDoctor)
 
         await newDoctor.save()
-console.log("hi problem here nhi here ")
+        console.log("hi problem here nhi here ")
 
         const adminUser = await userModel.findOne({ isAdmin: true })
         const notification = adminUser.notification
@@ -180,7 +184,7 @@ const deleteAllNotificationController = async (req, res) => {
 
 const getAllDoctorsController = async (req, res) => {
     try {
-        const doctors = await doctorModel.find({ status: "approved" })
+        const doctors = await doctorModel.find({ status: "approved" }).populate("userId")
         res.status(200).send({
             success: true,
             message: "doctors lists fetched successfully",
@@ -199,8 +203,15 @@ const getAllDoctorsController = async (req, res) => {
 //book appointment
 const bookAppointmentController = async (req, res) => {
     try {
-        // req.body.date=moment(req.body.date,'DD-MM-YYYY').toISOString()
-        // req.body.time=moment(req.body.time,'HH:mm').toISOString()
+        const { doctorId, userId, date, time } = req.body;
+        // Check if time slot already booked
+        const existing = await appointmentModel.findOne({ doctorId, date, time })
+        if (existing) {
+            return res.status(409).send({
+                success: false,
+                message: "slot already booked"
+            })
+        }
         req.body.status = "pending"
         const newAppointment = new appointmentModel(req.body)
         await newAppointment.save()
@@ -229,40 +240,46 @@ const bookAppointmentController = async (req, res) => {
 //booking availability ctrl
 const bookingAvailabilityController = async (req, res) => {
     try {
-        const date =moment(req.body.date,"DD-MM-YYYY").toISOString() ;
-        const startTime=moment(req.body.time,"HH:mm").toISOString()
-        const doctorId = req.body.doctorId;
-        const doctor = await doctorModel.findById(doctorId);
-        if (!doctor) {
-            return res.status(404).send({
-              message: "Doctor not found",
-              success: false,
-            });
-          }
-          const start = moment(doctor.timings[0], "HH:mm").toISOString();
-          const end = moment(doctor.timings[1], "HH:mm").toISOString();
-          if(!moment(startTime).isBetween(start,end,undefined,"[]")){
+        const { doctorId, userId, date, time } = req.body;
+        // Check if time slot already booked
+        console.log("date ",date)
+        console.log("time ",time)
+        const existing = await appointmentModel.findOne({ doctorId, date, time })
+        if (existing) {
             return res.status(200).send({
-                message:"Appointment Not available",
-                success:false,
-            })
-          }
-        const appointment = await appointmentModel.find({
-            doctorId,
-            date,
-            time:startTime,
-        });
-        if (appointment.length>0) {
-            return res.status(200).send({
-                message: "Appointment not available at this time",
-                success: true,
-            })
-        } else {
-            return res.status(200).send({
-                success: true,
-                message: "Appointment Available",
+                success: false,
+                message: "Appointment not availabale"
             })
         }
+
+        // 2. Fetch doctor's working hours (timings)
+        const doctor=await doctorModel.findById(doctorId)
+        if(!doctor){
+            return res.status(404).send({
+                success:false,
+                message:"Doctor not found"
+            })
+        }
+
+        const starttime=moment(doctor.timings[0]).local()
+        const endtime=moment(doctor.timings[1]).local()
+        const selectedtime=moment(time).local()
+
+        console.log("Starttime ",starttime)
+        console.log("endtime ",endtime)
+        console.log("selectedtime ",selectedtime)
+        // const isTimeAvailable=doctor.timings.includes(time)
+        if(selectedtime.isBefore(starttime) || selectedtime.isAfter(endtime)){
+            return res.status(200).send({
+                success: false,
+                message: "Appointment not available (time is outside doctor's working hours).",
+              });
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Appointment Available",
+        })
+
 
     } catch (error) {
         console.log(error)
@@ -308,7 +325,7 @@ const userAppointmentsController = async (req, res) => {
         //         message:`Your Appointment has been updated ${status}`,
         //         onClickPath:'/doctor-appointments',
         //     });
-        const appointments = await appointmentModel.find({ userId: req.body.userId });
+        const appointments = await appointmentModel.find({ userId: req.body.userId })
         res.status(200).send({
             success: true,
             message: "appointments Lists Fetched Successfully",
@@ -365,6 +382,34 @@ const updateProfileImageController = async (req, res) => {
         })
     }
 }
+
+const deleteAppointmentController=async(req,res)=>{
+    try {
+        const {appointmentId}=req.body;
+        const deletedAppointment=await appointmentModel.findByIdAndDelete(appointmentId)
+
+        if(!deletedAppointment){
+            return res.status(404).send({
+                success:false,
+                message: "Appointment not found",
+            })
+        }
+        res.status(200).send({
+            success: true,
+            message: "Appointment deleted successfully",
+            data: deletedAppointment,
+          });
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            error,
+            message:"Unable to delete appointment"
+        })
+    }
+}
+
 module.exports = {
     loginController,
     registerController,
@@ -376,5 +421,6 @@ module.exports = {
     bookAppointmentController,
     bookingAvailabilityController,
     userAppointmentsController,
-    updateProfileImageController
+    updateProfileImageController,
+    deleteAppointmentController
 }

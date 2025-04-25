@@ -51,11 +51,11 @@ const Userprofile = () => {
         (<div className='card m-2 p-2'>
           <img src={user?.profileImage} alt="img" className='w-[200px]' />
           <form onSubmit={handleupdateimage} encType="multipart/form-data">
-            <input type="file" class="fileupload" name="avatar" onChange={(e) => {
+            <input type="file" className="fileupload" name="avatar" onChange={(e) => {
               console.log("vlaue ", e)
-              setUploadimage(e.target.files[0])
+              setUploadimage(e.target.files[0]) 
             }} />
-            <button class="bg-blue-600 p-2 text-white rounded-md" type="submit" >Upload</button>
+            <button className="bg-blue-600 p-2 text-white rounded-md" type="submit" >Upload</button>
           </form>
           <h5>Id: </h5><p>{user._id}</p>
           <h5>Name: </h5><p>{user.name}</p>

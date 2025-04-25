@@ -2,7 +2,7 @@ import React ,{useEffect, useState }from 'react'
 import Layout from '../components/Layout'
 import axios from 'axios';
 import moment from 'moment';
-import { Table } from 'antd';
+import { message, Table } from 'antd';
 
 const Appointments = () => {
     const [appointments,setAppointments]=useState([]);
@@ -22,6 +22,35 @@ const Appointments = () => {
             console.log(error)
         }
     }
+
+
+    //delete appointment
+    const deleteAppointment=async(record)=>{
+try {
+    const res=await axios.post("/api/v1/user/delete-appointment",
+        {
+            appointmentId:record._id,
+        },
+        {
+            headers:{
+                Authorization:`Bearer ${localStorage.getItem("token")}`
+            }
+        }
+    )
+    if(res.data.success){
+        message.success(res.data.message)
+        setAppointments((prevAppointments)=>
+        prevAppointments.filter((appointment)=>
+        appointment._id!==record._id))
+    }
+    else{
+        message.error(res.data.message)
+    }
+} catch (error) {
+    console.log(error)
+}
+    }
+
     useEffect(()=>{
         getAppointments()
     },[])
@@ -58,11 +87,20 @@ const Appointments = () => {
             title:'Status',
             dataIndex:'status',
         },
+        {
+            title:"Clear",
+            render:(text,record)=>{
+                return(
+                    <button onClick={()=>deleteAppointment(record)}> <i className="fa-solid fa-x" ></i></button>
+                )
+            }
+
+        }
     ]
   return (
     <Layout>
       <h1 className='text-center'>Appointments list</h1>
-      <Table columns={columns} dataSource={appointments} />
+      <Table columns={columns} rowKey="_id" dataSource={appointments} />
     </Layout>
   )
 }

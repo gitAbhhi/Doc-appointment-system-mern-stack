@@ -1,5 +1,5 @@
 const express =require('express')
-const { loginController, registerController, authController,applyDoctorController,getAllNotificationController,deleteAllNotificationController, getAllDoctorsController, bookAppointmentController, bookingAvailabilityController, userAppointmentsController, updateProfileImageController} = require('../controllers/userCtrl')
+const { loginController, registerController, authController,applyDoctorController,getAllNotificationController,deleteAllNotificationController, getAllDoctorsController, bookAppointmentController, bookingAvailabilityController, userAppointmentsController, updateProfileImageController, deleteAppointmentController} = require('../controllers/userCtrl')
 const authMiddleware = require('../middlewares/authMiddleware')
 const upload=require("../config/multerconfig")
 
@@ -18,11 +18,9 @@ router.post('/getUserData',authMiddleware,authController)
 
 //Apply doctor||post
 router.post('/apply-doctor',authMiddleware,upload.single("profileImage"),applyDoctorController)
-module.exports=router;
 
 //Notification doctor||post
 router.post('/get-all-notification',authMiddleware,getAllNotificationController)
-module.exports=router;
 
 //Notification doctor||post
 router.post('/delete-all-notification',authMiddleware,deleteAllNotificationController)
@@ -33,6 +31,9 @@ router.get('/getAllDoctors',authMiddleware,getAllDoctorsController)
 //book appointment
 router.post('/book-appointment',authMiddleware,bookAppointmentController)
 
+//delete-appointment
+router.post('/delete-appointment',authMiddleware,deleteAppointmentController)
+
 //booking availability
 router.post('/booking-availability',authMiddleware,bookingAvailabilityController)
 
@@ -41,4 +42,5 @@ router.get('/user-appointments',authMiddleware,userAppointmentsController)
 
 //update Profile Image
 router.post("/updateProfileImage",authMiddleware,upload.single("avatar"),updateProfileImageController)
+
 module.exports=router;

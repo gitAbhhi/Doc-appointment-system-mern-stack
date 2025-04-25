@@ -16,8 +16,9 @@ const BookingPage = () => {
   const [time, setTime] = useState("")
   const [isAvailable, setIsAvailable] = useState()
   const dispatch = useDispatch()
+
   // login user data
-  const getUserData = async () => {
+  const getdoctordata = async () => {
     try {
       const res = await axios.post(
         "/api/v1/doctor/getDoctorById",
@@ -103,7 +104,7 @@ const BookingPage = () => {
     }
   }
   useEffect(() => {
-    getUserData();
+    getdoctordata();
     //eslint-disable-next-line
   }, []);
   return (
@@ -141,91 +142,7 @@ const BookingPage = () => {
           </div>
         )}
       </div>
-      <div style={{ fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-      <h2 style={{ margin: '0 0 16px 0', color: '#333' }}>Booking slots</h2>
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-        <div
-          style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            border: '1px solid #ddd',
-            color: '#777',
-          }}
-        ></div>
-        {days.map((day, index) => (
-          <div
-            key={index}
-            style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '50%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              border: '1px solid #ddd',
-              color: index === 0 ? '#fff' : '#777',
-              backgroundColor: index === 0 ? '#6750A4' : 'transparent',
-              cursor: 'pointer',
-            }}
-          >
-            <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{day}</div>
-            <div style={{ fontSize: '12px' }}>{dates[index]}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-        {timeSlots.map((time, index) => (
-          <button
-            key={index}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '24px',
-              border: '1px solid #ddd',
-              backgroundColor: 'transparent',
-              color: '#333',
-              fontSize: '14px',
-              cursor: 'pointer',
-            }}
-          >
-            {time}
-          </button>
-        ))}
-        <div
-          style={{
-            width: '48px',
-            height: '32px',
-            borderRadius: '50%',
-            border: '1px solid #ddd',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: '#777',
-            fontSize: '14px',
-          }}
-        >
-          ...
-        </div>
-      </div>
-      <button
-        style={{
-          padding: '12px 24px',
-          borderRadius: '8px',
-          backgroundColor: '#6750A4',
-          color: '#fff',
-          border: 'none',
-          fontSize: '16px',
-          cursor: 'pointer',
-        }}
-      >
-        Book an appointment
-      </button>
-    </div>
+     
     </Layout>
   )
 }

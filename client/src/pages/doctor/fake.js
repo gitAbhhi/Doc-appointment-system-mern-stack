@@ -49,3 +49,23 @@
 // })
 
 // ,profileImage:fullImage 
+
+{/* <div className="d-flex flex-column w-50">
+              <DatePicker aria-required={"true"} className='m-2' format="DD-MM-YYYY" onChange={(value) => {
+             
+                setDate(value)
+
+              }} />
+              <TimePicker aria-required={"true"} className='m-2' format="HH:mm" onChange={(value) => {
+                console.log("value ",value)
+               console.log("Formatted Time:", moment(value).format("HH:mm"));
+           
+                setTime(value)
+
+              }} />
+              <button className='btn btn-primary mt-2' onClick={(e)=>handleAvailability(e)}>check Availability</button>
+              
+              <button className='btn btn-dark mt-2' onClick={(e)=>handleBooking(e)}>Book Now</button>
+            </div> */}
+
+            

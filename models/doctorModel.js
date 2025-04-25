@@ -2,7 +2,9 @@ const mongoose=require('mongoose')
 
 const doctorSchema=new mongoose.Schema({
     userId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        required:true 
     },
     firstName:{
         type:String,
@@ -44,7 +46,7 @@ const doctorSchema=new mongoose.Schema({
         default:'pending'
     },
     timings:{
-        type:Object,
+        type:[String],
         required:[true,'work timing is required']
     },
     userInfo:{

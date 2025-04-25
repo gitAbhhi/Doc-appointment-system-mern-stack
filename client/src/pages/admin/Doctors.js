@@ -39,10 +39,18 @@ const dispatch=useDispatch()
         )
         if(res.data.success){
           message.success(res.data.message);
+          // console.log("doctro status ",res.data)
+          // setDoctors(prevdoctor=>{
+          //   prevdoctor.map(doctor=>
+          //     doctor._id===res.data.doctor._id?res.data.doctor:doctor
+          //   )
+          // })
           getDoctors()
+
         }
         
       } catch (error) {
+        console.log(error)
         message.error("Something went wrong")
       }
   }
@@ -71,8 +79,8 @@ const dispatch=useDispatch()
       dataIndex:'actions',
       render:(text,record)=>(
         <div className='d-flex'>
-          {record.status === "pending"?(<button className='btn btn-success' onClick={()=>handleAccountStatus(record,"approved")}>Approve</button>)
-          :(<button className='btn btn-danger' onClick={()=>handleAccountStatus(record,"pending")} >Reject</button>)}
+          {record.status === "pending"?(<button className='btn btn-success w-[100px]' onClick={()=>handleAccountStatus(record,"approved")}>Approve</button>)
+          :(<button className='btn btn-danger w-[100px]' onClick={()=>handleAccountStatus(record,"pending")} >Reject</button>)}
         </div>
       ),
     },

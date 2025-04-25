@@ -55,7 +55,7 @@ const changeAccountStatusController=async(req,res)=>{
         res.status(201).send({
             success:true,
             message:"Account Status Updated",
-            data:doctor,
+            doctor,
         })
         
     } catch (error) {
@@ -68,6 +68,29 @@ const changeAccountStatusController=async(req,res)=>{
     }
 }
 
+// user status block or not ctrl
+const changeUserStatusController=async(req,res)=>{
+try {
+    const {UserId,status}=req.body
+    const user=await userModel.findByIdAndUpdate(UserId,
+        {block:status},{new:true}
+    )
+    res.status(200).send({
+        success:true,
+        message:`User ${status?"block":"Unblock"} successfully`,
+        user
+    })
+} catch (error) {
+    console.log(error)
+    res.status(500).send({
+        success:false,
+        error,
+        message:"error in user Status"
+    })
+}
+}
+
 module.exports={getAllDoctorsController,
     getAllUsersController,
-    changeAccountStatusController}
+    changeAccountStatusController,
+    changeUserStatusController}
