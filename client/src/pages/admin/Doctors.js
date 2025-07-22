@@ -39,12 +39,6 @@ const dispatch=useDispatch()
         )
         if(res.data.success){
           message.success(res.data.message);
-          // console.log("doctro status ",res.data)
-          // setDoctors(prevdoctor=>{
-          //   prevdoctor.map(doctor=>
-          //     doctor._id===res.data.doctor._id?res.data.doctor:doctor
-          //   )
-          // })
           getDoctors()
 
         }

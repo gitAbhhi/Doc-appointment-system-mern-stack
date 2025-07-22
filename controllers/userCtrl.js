@@ -13,7 +13,7 @@ const registerController = async (req, res) => {
             return res.status(200).send({ message: "User Already Exist", success: false });
         }
         const password = req.body.password;
-        const salt = await bcrypt / genSalt(10);
+        const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         req.body.password = hashedPassword;
         const newUser = new userModel(req.body);
@@ -82,31 +82,12 @@ const authController = async (req, res) => {
 //apply doctor controller
 const applyDoctorController = async (req, res) => {
     try {
-        // console.log("REQ FILE:", req.file);
-        // console.log("REQ BODY:", req.body);
-        // const file = req.file;
-        // if (!file) {
-        //     return res.status(400).send({
-        //         success: false,
-        //         message: "no Image upload"
-        //     })
-        // }
-        // console.log("hi problem here ")
-
-        // Convert image buffer to base64 string
-        // const base64Image = file.buffer.toString("base64");
-        // const mimeType = file.mimetype;
-
-        // const fullImage = `data:${mimeType};base64,${base64Image}`;
-
-        // const timings = JSON.parse(req.body.timings); // ["10:00", "18:00"]
         const userInfo = JSON.parse(req.body.userInfo)
         const newDoctor = await doctorModel({ ...req.body, status: 'pending', userInfo: userInfo })
-        console.log("newDoctor detail", req.body.timings)
-        console.log("newDoctor detail", req.newDoctor)
+        // console.log("newDoctor detail", req.body.timings)
+        // console.log("newDoctor detail", req.newDoctor)
 
         await newDoctor.save()
-        console.log("hi problem here nhi here ")
 
         const adminUser = await userModel.findOne({ isAdmin: true })
         const notification = adminUser.notification
@@ -242,8 +223,8 @@ const bookingAvailabilityController = async (req, res) => {
     try {
         const { doctorId, userId, date, time } = req.body;
         // Check if time slot already booked
-        console.log("date ",date)
-        console.log("time ",time)
+        // console.log("date ",date)
+        // console.log("time ",time)
         const existing = await appointmentModel.findOne({ doctorId, date, time })
         if (existing) {
             return res.status(200).send({
@@ -265,9 +246,10 @@ const bookingAvailabilityController = async (req, res) => {
         const endtime=moment(doctor.timings[1]).local()
         const selectedtime=moment(time).local()
 
-        console.log("Starttime ",starttime)
-        console.log("endtime ",endtime)
-        console.log("selectedtime ",selectedtime)
+        // console.log("Starttime ",starttime)
+        // console.log("endtime ",endtime)
+        // console.log("selectedtime ",selectedtime)
+
         // const isTimeAvailable=doctor.timings.includes(time)
         if(selectedtime.isBefore(starttime) || selectedtime.isAfter(endtime)){
             return res.status(200).send({
@@ -293,38 +275,7 @@ const bookingAvailabilityController = async (req, res) => {
 
 //user appointment ctrl
 const userAppointmentsController = async (req, res) => {
-    // try {
-    //     const {appointmentId,status}=req.body
-    //     const appointments=await appointmentModel.findByIdAndUpdate(
-    //         appointmentId,
-    //         {status}
-    //     )
-    //     const user=await userModel.findOne({_id:appointmentId})
-    //     user.notification.push({
-    //         type:"status-updated",
-    //         message:`Your Appointment has been updated ${status}`,
-    //         onClickPath:'/doctor-appointments',
-    //     });
-    //     await user.save()
-    //     res.status(200).send({
-    //         success:true,
-    //         message:"Appointment status updated"
-    //     })
-    // } catch (error) {
-    //     console.log(error)
-    //     res.status(500).send({
-    //         success:false,
-    //         error,
-    //         message:"Error in user appointment"
-    //     })
-    // }
     try {
-        // const user=await userModel.findOne({_id:appointments.userId})
-        //     user.notification.push({
-        //         type:"status-updated",
-        //         message:`Your Appointment has been updated ${status}`,
-        //         onClickPath:'/doctor-appointments',
-        //     });
         const appointments = await appointmentModel.find({ userId: req.body.userId })
         res.status(200).send({
             success: true,
@@ -344,9 +295,9 @@ const userAppointmentsController = async (req, res) => {
 // updateProfileImageController
 const updateProfileImageController = async (req, res) => {
     try {
-        console.log(req.body.filename)
+        // console.log(req.body.filename)
         const { userId } = req.body;
-        console.log(req.body.avatar)
+        // console.log(req.body.avatar)
         const file = req.file;
         if (!file) {
             return res.status(400).send({

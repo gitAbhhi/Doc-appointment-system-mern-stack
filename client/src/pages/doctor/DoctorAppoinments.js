@@ -59,15 +59,7 @@ const DoctorAppoinments = () => {
                 </span>
             )
         },
-        // {
-        //     title:'Phone',
-        //     dataIndex:'phone',
-        //     render:(text,record)=>(
-        //         <span>
-        //             {record.doctorId.phone}
-        //         </span>
-        //     )
-        // },
+      
         {
             title:'Date & Time',
             dataIndex:'date',
@@ -113,7 +105,7 @@ const DoctorAppoinments = () => {
     ]
   return (
     <Layout>
-       <h1 className='text-center'>Appointments list</h1>
+       <h1 className='text-center text-3xl'>Appointments list</h1>
        <Table columns={columns}  dataSource={appointments} />
     </Layout>
   )

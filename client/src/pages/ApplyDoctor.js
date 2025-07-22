@@ -40,11 +40,7 @@ const ApplyDoctor = () => {
             formData.append("timings", values.timings[0]);
             formData.append("timings", values.timings[1]);
             formData.append("userInfo",JSON.stringify(user))
-            // formData.append("timings", JSON.stringify(values.timings)); 
-
-
-            // console.log(values)
-
+            
             console.log(values)
             const res = await axios.post("/api/v1/user/apply-doctor",
 
