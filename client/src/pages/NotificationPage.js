@@ -117,7 +117,7 @@ const NotificationPage = () => {
   return (
    <Layout>
     <h4 className='text-center text-2xl'>Notification page</h4>
-    <Tabs items={items} />;
+    <Tabs items={items} />
    </Layout>
   )
 };

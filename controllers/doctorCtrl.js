@@ -1,6 +1,6 @@
 const appointmentModel = require("../models/appointmentModels");
-const doctorModel = require("../models/doctorModel");
 const userModel = require("../models/userModels");
+const doctorModel = require("../models/doctorModel");
 
 
 const getDoctorInfoController = async (req, res) => {
@@ -34,14 +34,14 @@ const updateProfileController = async (req, res) => {
             restofbody.profileImage = fullImage;
         }
 
-        console.log("req.body ", req.body.userId)
+        // console.log("req.body ", req.body.userId)
         const doctor = await doctorModel.findOneAndUpdate({ userId: userId },
             restofbody,
             {
                 new: true
             }
         )
-        console.log("doctor", doctor)
+        // console.log("doctor", doctor)
         res.status(201).send({
             success: true,
             message: "Doctor profile updated",
@@ -99,15 +99,14 @@ const doctorAppointmentsController = async (req, res) => {
 const updateStatusController = async (req, res) => {
     try {
         const { appointmentsId, status, UserId } = req.body;
-        // const status=req.body.appointment.status;
-        console.log(req.body)
-        console.log("userid form doc  ctrl", UserId)
+        // console.log(req.body)
+        // console.log("userid form doc  ctrl", UserId)
         const appointments = await appointmentModel.findByIdAndUpdate(
             appointmentsId,
             { status }
         );
         const user = await userModel.findOne({ _id: UserId });
-        console.log("user form doc ctrl ", user)
+        // console.log("user form doc ctrl ", user)
         const notification = user.notification
         notification.push({
             type: "status-updated",
@@ -130,37 +129,6 @@ const updateStatusController = async (req, res) => {
     }
 }
 
-const updateSlotCtrl = async (req, res) => {
-    try {
-        const { date, times, doctorId } = req.body;
-    const doctor = await doctorModel.findById(doctorId);
-
-    if (!doctor) {
-        return res.status(404).send("Doctor not found");
-    }
-
-    const existingSlot = doctor.availableSlots.find(s => s.date === date);
-    if (existingSlot) {
-        existingSlot.times = times;
-    }else{
-        doctor.availableSlots.push({date,times})
-    }
-
-    await doctor.save();
-    res.status(200).send({
-        success:true,
-        message:"slots updated"
-    })
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({
-            success:false,
-            error,
-            message:"error in slot updation"
-        })
-    }
-    
-}
 
 const getbookedSlotCtrl=async(req,res)=>{
     try {
@@ -185,37 +153,11 @@ const getbookedSlotCtrl=async(req,res)=>{
 }
 
 
-// const getBookedSlotCtrl=async(req,res)=>{
-// try {
-//     const {doctorId,date}=req.body;
-// const appointments=await appointmentModel.find({
-//     doctorId,date
-// })
-// const bookedSlots=appointments.map(appt=>appt.time)
-// res.status(200).send({
-//     success:true,
-//     message:"get booked slot successfully",
-//     bookedSlots
-// })
-    
-// } catch (error) {
-//     console.log(error)
-//     res.status(500).send({
-//         success:false,
-//         error,
-//         message:"error in geting booking slot"
-//     })
-// }
-// }
-
-
-
 module.exports = {
     getDoctorInfoController,
     updateProfileController,
     getDoctorByIdController,
     doctorAppointmentsController,
     updateStatusController,
-    updateSlotCtrl,
     getbookedSlotCtrl
 };
