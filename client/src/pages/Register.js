@@ -40,7 +40,7 @@ const Register = () => {
                 <Input type="email" required />
             </Form.Item>
             <Form.Item label="Password" name="password">
-                <Input type="password" required />
+                <Input.Password required />
             </Form.Item>
             <div className='text-center'>
             <Link to="/login" className='m-4'>Already user login here</Link>

@@ -90,7 +90,7 @@ const Profile = () => {
     }, [])
     return (
         <Layout>
-            <h1 className='text-center'>Manange Profile</h1>
+            <h1 className='text-center text-3xl'>Manange Profile</h1>
             {
                 doctor && (
                     <Form layout='vertical' onFinish={handleFinish} className='m-3' initialValues={{

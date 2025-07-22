@@ -16,7 +16,7 @@ const app=express()
 //middlewares
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(moragan('dev'))
+// app.use(moragan('dev'))
 
 //routes
 app.use("/api/v1/user",require("./routes/userRoutes"));

@@ -1,6 +1,6 @@
 const express=require('express')
 const authMiddleware=require('../middlewares/authMiddleware')
-const { getDoctorInfoController, updateProfileController, getDoctorByIdController, doctorAppointmentsController, updateStatusController, updateSlotCtrl, getweeklySlotCtrl, getBookedSlotCtrl, getbookedSlotCtrl} = require('../controllers/doctorCtrl')
+const { getDoctorInfoController, updateProfileController, getDoctorByIdController, doctorAppointmentsController, updateStatusController, getbookedSlotCtrl} = require('../controllers/doctorCtrl')
 const router=express.Router()
 const upload=require("../config/multerconfig")
 
